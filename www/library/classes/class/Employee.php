@@ -1,6 +1,9 @@
 <?php
-require_once 'classes/class/Abstract/AbstractEmployee.php';
-require_once 'classes/class/api/Call.php';
+/* Add this on all pages on top. */
+set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.PATH_SEPARATOR.$_SERVER['DOCUMENT_ROOT'].'/library/classes/');
+
+require_once 'Abstract/AbstractEmployee.php';
+require_once 'api/Call.php';
 /**
  *
  * Employee data class to save its objects
@@ -10,7 +13,8 @@ require_once 'classes/class/api/Call.php';
 
 class Employee extends AbstractEmployee {
  /** @var Call */
- protected $call; 
+ protected $call;
+ 
  /**
   * 
   * @param Patient $patient
@@ -18,6 +22,9 @@ class Employee extends AbstractEmployee {
   */
  public function __construct()
  {
+  
+  $this->call = new Call();
+  
   parent::__construct();
  }
  
@@ -35,17 +42,6 @@ class Employee extends AbstractEmployee {
  /**
   *
   * Load returned data into the current object.
-  *  
-  * @return Employee|null
-  */
- public function load(array $data): ?Employee
- {
-  
- }
-
- /**
-  *
-  * Load a list of all the items for pagination
   *  
   * @return Employee|null
   */

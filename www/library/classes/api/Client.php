@@ -1,4 +1,6 @@
 <?php
+/* Add this on all pages on top. */
+set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.PATH_SEPARATOR.$_SERVER['DOCUMENT_ROOT'].'/library/classes/');
 
 /**
  * Quickly and easily access any REST or REST-like API.
@@ -18,8 +20,6 @@ class Client
     protected $host;
     /** @var array */
     protected $headers;
-    /** @var string */
-    protected $version;
     /** @var array */
     protected $path;
     /** @var array */
@@ -82,7 +82,7 @@ class Client
      *
      * @return Client
      */
-    public function setCurlOptions(array $options)
+    public function setCurlOptions(array $options): Client
     {
         $this->curlOptions = $options;
         return $this;
@@ -95,7 +95,7 @@ class Client
      *
      * @return Client
      */
-    public function setRetryOnLimit($retry)
+    public function setRetryOnLimit($retry): Client
     {
         $this->retryOnLimit = $retry;
 
@@ -105,7 +105,7 @@ class Client
     /**
      * @return array
      */
-    public function getCurlOptions()
+    public function getCurlOptions(): array
     {
         return $this->curlOptions;
     }
@@ -117,7 +117,7 @@ class Client
       *
       * @return string
       */
-    private function buildUrl($queryParams = null)
+    private function buildUrl($queryParams = null): string
     {
         $path = '/' . implode('/', $this->path);
         if (isset($queryParams)) {
@@ -138,7 +138,7 @@ class Client
       *
       * @return Response object
       */
-    public function makeRequest($method, $url, $body = null, $headers = null, $retryOnLimit = false)
+    public function request($method, $url, $body = null, $headers = null, $retryOnLimit = false): Response
     {
         $curl = curl_init($url);
 
@@ -183,7 +183,7 @@ class Client
             $headers = $response->headers(true);
             $sleepDurations = $headers['X-Ratelimit-Reset'] - time();
             sleep($sleepDurations > 0 ? $sleepDurations : 0);
-            return $this->makeRequest($method, $url, $body, $headers, false);
+            return $this->request($method, $url, $body, $headers, false);
         }
 
         return $response;
@@ -231,7 +231,7 @@ class Client
             $url = $this->buildUrl($queryParams);
             $headers = isset($args[2]) ? $args[2] : null;
             $retryOnLimit = isset($args[3]) ? $args[3] : $this->retryOnLimit;
-            return $this->makeRequest($name, $url, $body, $headers, $retryOnLimit);
+            return $this->request($name, $url, $body, $headers, $retryOnLimit);
         }
 
         return $this->_($name);

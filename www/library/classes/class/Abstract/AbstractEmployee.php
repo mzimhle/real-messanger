@@ -56,35 +56,35 @@ class Employee {
  /**
   * @return \DateTime
   */
-  function getDateOfBirth(): \DateTime() 
+  function getDateOfBirth(): \DateTime
   {
    return $this->dateOfBirth;
   }      
  /**
   * @return \DateTime
   */
-  function getEmploymentStartDate(): \DateTime() 
+  function getEmploymentStartDate(): \DateTime 
   {
    return $this->employmentStartDate;
   }
  /**
   * @return \DateTime|null
   */
-  function getEmploymentEndDate(): ?\DateTime() 
+  function getEmploymentEndDate(): ?\DateTime
   {
    return $this->employmentEndDate;
   }
  /**
   * @return \DateTime|null
   */
-  function getLastNotification(): ?\DateTime() 
+  function getLastNotification(): ?\DateTime
   {
    return $this->lastNotification;
   }
  /**
   * @return \DateTime|null
   */
-  function getLastBirthdayNotified(): ?\DateTime() 
+  function getLastBirthdayNotified(): ?\DateTime
   {
    return $this->lastBirthdayNotified;
   }
@@ -147,7 +147,7 @@ class Employee {
   * @param \DateTime $lastNotification
   * @return Employee
   */
-  function getLastNotification(\DateTime $lastNotification): Employee
+  function setLastNotification(\DateTime $lastNotification): Employee
   {
    $this->lastNotification = $lastNotification;
    return $this;
@@ -156,7 +156,7 @@ class Employee {
   * @param \DateTime $lastBirthdayNotified
   * @return Employee
   */
-  function getLastBirthdayNotified(): Employee 
+  function setLastBirthdayNotified(): Employee 
   {
    $this->lastBirthdayNotified = $lastBirthdayNotified;
    return $this;

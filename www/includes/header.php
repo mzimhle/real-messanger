@@ -17,19 +17,6 @@ $currentPage = isset($page[1]) && trim($page[1]) != '' ? trim($page[1]) : '';
 		  <i class="icon ion-ios-home-outline"></i>
 		  <span>Dashboard</span>
 		</a>
-	  </li>
-	  <li class="nav-item <?php echo $currentPage == 'member' ? 'active' : ''; ?>">
-		<a class="nav-link" href="/member/">
-		  <i class="icon ion-ios-analytics-outline"></i>
-		  <span>Members</span>
-		</a>
-	  </li>
-	  <li class="nav-item <?php echo $currentPage == 'animal' ? 'active' : ''; ?>">
-		<a class="nav-link" href="/animal/">
-		  <i class="icon ion-ios-analytics-outline"></i>
-		  <span>Animals</span>
-		</a>
-	  </li>
 	</ul>
   </div><!-- container -->
 </div><!-- slim-navbar -->
