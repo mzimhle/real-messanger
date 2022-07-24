@@ -7,7 +7,7 @@
  * @author     Mzimhle Mosiwe
  */
 
-class Employee {
+class AbstractEmployee {
   /** @var id */
   protected $id;
   /** @var string */  
@@ -120,45 +120,71 @@ class Employee {
   * @param \DateTime $dateOfBirth
   * @return Employee
   */
-  function setDateOfBirth(\DateTime $dateOfBirth): Employee
+  function setDateOfBirth(?string $dateOfBirth): Employee
   {
-   $this->dateOfBirth = $dateOfBirth;
+   if($dateOfBirth === null || $dateOfBirth === '') {
+    $variable = null;
+   } else {
+    $variable = new DateTime($dateOfBirth);   
+   }      
+   $this->dateOfBirth = $variable;
    return $this;
   }      
  /**
   * @param \DateTime $employmentStartDate
   * @return Employee
   */
-  function setEmploymentStartDate(\DateTime $employmentStartDate): Employee
+  function setEmploymentStartDate(?string $employmentStartDate): Employee
   {
-   $this->employmentStartDate = $employmentStartDate;
+   if($employmentStartDate === null || $employmentStartDate === '') {
+    $variable = null;
+   } else {
+    $variable = new DateTime($employmentStartDate);   
+   }     
+   $this->employmentStartDate = $variable;
    return $this;
   }
  /**
   * @param \DateTime $employmentEndDate
   * @return Employee
   */
-  function setEmploymentEndDate(\DateTime $employmentEndDate): Employee 
+  function setEmploymentEndDate(?string $employmentEndDate): Employee 
   {
-   $this->employmentEndDate = $employmentEndDate;
+   if($employmentEndDate === null || $employmentEndDate === '') {
+    $variable = null;
+   } else {
+    $variable = new DateTime($employmentEndDate);   
+   }     
+   $this->employmentEndDate = $variable;
    return $this;
   }
  /**
   * @param \DateTime $lastNotification
   * @return Employee
   */
-  function setLastNotification(\DateTime $lastNotification): Employee
+  function setLastNotification(?string $lastNotification): Employee
   {
-   $this->lastNotification = $lastNotification;
+   if($lastNotification === null || $lastNotification === '') {
+    $variable = null;
+   } else {
+    $variable = new DateTime($lastNotification);   
+   }
+
+   $this->lastNotification = $variable;
    return $this;
   }
  /**
   * @param \DateTime $lastBirthdayNotified
   * @return Employee
   */
-  function setLastBirthdayNotified(): Employee 
+  function setLastBirthdayNotified(?string $lastBirthdayNotified): Employee 
   {
-   $this->lastBirthdayNotified = $lastBirthdayNotified;
+   if($lastBirthdayNotified === null || $lastBirthdayNotified === '') {
+    $variable = null;
+   } else {
+    $variable = new DateTime($lastBirthdayNotified);   
+   }
+   $this->lastBirthdayNotified = $variable;
    return $this;
   }      
 }

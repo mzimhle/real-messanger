@@ -7,8 +7,8 @@
 <link href="/css/flag-icon.min.css" rel="stylesheet">
 <link href="/css/datatable.css" rel="stylesheet">
 <!-- Meta -->
-<meta name="description" content="Yam Accounting Solution">
-<meta name="author" content="Yam Accounting Solution">
+<meta name="description" content="RealMessanger">
+<meta name="author" content="RealMessanger">
 <title>RealMessanger Assessment | Mzimhle Mosiwe</title>
 <!-- Meta -->
 <!-- Slim CSS -->

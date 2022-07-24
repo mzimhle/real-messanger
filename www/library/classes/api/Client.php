@@ -2,6 +2,8 @@
 /* Add this on all pages on top. */
 set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.PATH_SEPARATOR.$_SERVER['DOCUMENT_ROOT'].'/library/classes/');
 
+require_once 'Response.php';
+
 /**
  * Quickly and easily access any REST or REST-like API.
  * 
@@ -119,11 +121,11 @@ class Client
       */
     private function buildUrl($queryParams = null): string
     {
-        $path = '/' . implode('/', $this->path);
+        $path = implode('/', $this->path);
         if (isset($queryParams)) {
             $path .= '?' . http_build_query($queryParams);
         }
-        return sprintf('%s%s%s', $this->host, $this->version ?: '', $path);
+        return $path;
     }
 
     /**
@@ -141,31 +143,18 @@ class Client
     public function request($method, $url, $body = null, $headers = null, $retryOnLimit = false): Response
     {
         $curl = curl_init($url);
-
-        $options = array_merge(
-            [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => 1,
-                CURLOPT_CUSTOMREQUEST => strtoupper($method),
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_FAILONERROR => false,
-            ],
-            $this->curlOptions
-        );
-
-        curl_setopt_array($curl, $options);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt_array($curl, $this->curlOptions);
 
         if (isset($headers)) {
             $this->headers = array_merge($this->headers, $headers);
         }
-        if (isset($body)) {
-            $encodedBody = json_encode($body);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $encodedBody);
-            $this->headers = array_merge($this->headers, ['Content-Type: application/json']);
-        }
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
 
         $response = curl_exec($curl);
+
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
@@ -176,7 +165,7 @@ class Client
         $responseHeaders = array_map('trim', $responseHeaders);
 
         curl_close($curl);
-     
+
         $response = new Response($statusCode, $responseBody, $responseHeaders);
 
         if ($statusCode === 429 && $retryOnLimit) {
@@ -223,17 +212,20 @@ class Client
       */
     public function __call($name, $args)
     {
-        $name = strtolower($name);
+     $name = strtolower($name);
 
-        if (in_array($name, $this->methods, true)) {
-            $body = isset($args[0]) ? $args[0] : null;
-            $queryParams = isset($args[1]) ? $args[1] : null;
-            $url = $this->buildUrl($queryParams);
-            $headers = isset($args[2]) ? $args[2] : null;
-            $retryOnLimit = isset($args[3]) ? $args[3] : $this->retryOnLimit;
-            return $this->request($name, $url, $body, $headers, $retryOnLimit);
-        }
+     if (in_array($name, $this->methods, true)) {
 
-        return $this->_($name);
+      $url = isset($args[0]) ? $args[0] : null;
+      $queryParams = isset($args[1]) ? $args[1] : null;
+      $body = $this->buildUrl($queryParams);
+
+      $headers = isset($args[2]) ? $args[2] : null;
+      $retryOnLimit = isset($args[3]) ? $args[3] : $this->retryOnLimit;
+
+      return $this->request($name, $url, $body, $headers, $retryOnLimit);
+     }
+
+     return $this->_($name);
     }
 }

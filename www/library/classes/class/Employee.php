@@ -12,19 +12,17 @@ require_once 'api/Call.php';
  */
 
 class Employee extends AbstractEmployee {
+
  /** @var Call */
- protected $call;
+ public $call;
+ private $host = 'https://interview-assessment-1.realmdigital.co.za/employees';
  
- /**
-  * 
-  * @param Patient $patient
-  * @param HealthService $healthService
+ /*
+  * Initialize the employee
   */
  public function __construct()
  {
-  
-  $this->call = new Call();
-  
+  $this->call = new Call($this->host);
   parent::__construct();
  }
  
@@ -38,15 +36,43 @@ class Employee extends AbstractEmployee {
  {
   return ucwords(strtolower((sprintf('%s %s', $this->name, $this->lastname))));
  }
- 
+
  /**
   *
-  * Load returned data into the current object.
+  * Get the filtered data
   *  
-  * @return Employee|null
+  * @return string
   */
- public function load(array $data): ?Employee
+ public function getData(array $filters = []): ?array
  {
-  
+   $data = $this->call->fetch($filters);
+   $return = array();
+   
+   foreach($data as $key => $value) {
+    $return[] = $this->load($value);
+   }
+   return $return;
  }
+ 
+/**
+  *
+  * Load data into instance of this class
+  *  
+  * @return this
+  */
+ public function load(array $values): Employee
+ {
+   $this->setId($values['id']);
+   $this->setName($values['name']);
+   $this->setLastName($values['lastname']);
+   $this->setDateOfBirth($values['dateOfBirth']);
+   $this->setEmploymentStartDate((isset($values['employmentStartDate']) ? $values['employmentStartDate'] : null));
+   $this->setEmploymentEndDate((isset($values['employmentEndDate']) ? $values['employmentEndDate'] : null));
+   $this->setLastNotification((isset($values['lastNotification']) ? $values['lastNotification'] : null));
+   $this->setLastBirthdayNotified((isset($values['lastBirthdayNotified']) ? $values['lastBirthdayNotified'] : null));
+   
+   return $this;
+ }
+ 
+ 
 }
