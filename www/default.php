@@ -8,11 +8,25 @@ require_once 'class/Employee.php';
 $employeeObject = new Employee();
 /* Setup Pagination. */
 $filters = array(
- 'dateOfBirth_like' => '-02-15', // date("-m-d"),
+ 'dateOfBirth_like' => '-12-02', // date("Y-m-d"),
 );
 
 $employeeData = $employeeObject->getData($filters);
-print_r($employeeData); exit;
+
+// Send message
+if(count($employeeData)) {
+ foreach($employeeData as $employee) {
+  if(null !== $employee->getLastBirthdayNotified() && $employee->getLastBirthdayNotified()->format('Y-m-d') != date("Y-m-d")) {
+   $recipient = [
+    'recipient_from_name' => 'mzimhle.mosiwe@gmail.com',
+    'recipient_from_email' => 'Mzimhle Mosiwe',
+    'recipient_name' => 'Mzimhle Mosiwe',
+    'recipient_email' => 'mzimhle.mosiwe@gmail.com'
+   ];
+  }
+ }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,38 +51,36 @@ print_r($employeeData); exit;
     <label class="section-title">Birthday List</label>
     <p class="mg-b-20 mg-sm-b-20">Below is a list of employees having birthdays today</p>
     <div class="row">
-     <div class="col-md-12">										
-      <div class="form-group">
-       <button type="button" onclick="getRecords(); return false;" class="btn btn-primary">Search</button>
-      </div>
-      <div id="tableContent" class="table-responsive" align="center">
-       <div class="table-responsive">  
+     <div class="col-md-12">
        <table id="employee_data" class="table table-striped table-bordered">  
        <thead>  
        <tr>  
        <td>Full name</td>  
        <td>Date of Birth</td>  
        <td>Employment Start</td>  
-       <td>Employment End</td>   
+       <td>Employment End</td> 
+       <td>Birthday Notification</td>        
        </tr>  
        </thead>  
        <?php  
-       while($row = mysqli_fetch_array($result))  
-       {  
-       echo '  
-       <tr>  
-       <td>'.$row["name"].'</td>  
-       <td>'.$row["address"].'</td>  
-       <td>'.$row["gender"].'</td>  
-       <td>'.$row["designation"].'</td>  
-       <td>'.$row["age"].'</td>  
-       </tr>  
-       ';  
-       }  
+       if(count($employeeData) > 0) {
+        foreach($employeeData as $employee)
+        {
+         echo '  
+         <tr>  
+         <td>'.$employee->getName().' '.$employee->getLastName().'</td>  
+         <td>'.$employee->getDateOfBirth()->format('Y-m-d').'</td>  
+         <td>'.(null !== $employee->getEmploymentStartDate() ? $employee->getEmploymentStartDate()->format('Y-m-d') : 'N/A').'</td>  
+         <td>'.(null !== $employee->getEmploymentEndDate() ? $employee->getEmploymentEndDate()->format('Y-m-d') : 'N/A').'</td> 
+         <td>'.(null !== $employee->getLastBirthdayNotified() ? $employee->getLastBirthdayNotified()->format('Y-m-d') : 'N/A').'</td>     
+         </tr>  
+         ';  
+        }
+       } else {
+        echo '<tr><td colspan="5">There is currently no data</td></tr>';  
+       }
        ?>  
-       </table>  
-       </div>  
-      </div>
+       </table>   
      </div>
     </div>
     <!-- table-wrapper -->
@@ -76,4 +88,9 @@ print_r($employeeData); exit;
   </div><!-- container -->
  </div><!-- slim-mainpanel -->
 	<?php require_once 'includes/footer.php'; ?>
+ <script>
+  $(document).ready(function () {
+   $('#employee_data').DataTable();
+  });
+ </script>
 </html>

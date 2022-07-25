@@ -70,7 +70,7 @@ class Employee extends AbstractEmployee {
    $this->setEmploymentEndDate((isset($values['employmentEndDate']) ? $values['employmentEndDate'] : null));
    $this->setLastNotification((isset($values['lastNotification']) ? $values['lastNotification'] : null));
    $this->setLastBirthdayNotified((isset($values['lastBirthdayNotified']) ? $values['lastBirthdayNotified'] : null));
-   
+
    return $this;
  }
  
