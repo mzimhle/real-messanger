@@ -86,15 +86,18 @@ class Employee extends AbstractEmployee {
   *  
   * @return this
   */
- public function sendEmail(array $employeeData)
+ public function sendBirthdayEmail(array $employeeData)
  {
+  $sent = 0;
   // Send message
   if(count($employeeData)) {
    foreach($employeeData as $employee) {
-    if(null !== $employee->getLastBirthdayNotified() && $employee->getLastBirthdayNotified()->format('Y-m-d') != date("Y-m-d")) {
+
+    if(null === $employee->getLastBirthdayNotified() || $employee->getLastBirthdayNotified()->format('Y-m-d') != date("Y-m-d")) {
+
      $recipient = [
-      'recipient_from_name' => 'mzimhle.mosiwe@gmail.com',
-      'recipient_from_email' => 'Mzimhle Mosiwe',
+      'recipient_from_name' => 'Mzimhle Mosiwe',
+      'recipient_from_email' => 'no-reply@gmail.com',
       'recipient_name' => $employee->getName().' '.$employee->getLastName(),
       'recipient_email' => 'mzimhle.mosiwe@gmail.com',
       'dateOfBirth' => $employee->getDateOfBirth()->format('Y-m-d'),   
@@ -103,11 +106,11 @@ class Employee extends AbstractEmployee {
       'lastNotification' => (null !== $employee->getLastNotification() ? $employee->getLastNotification()->format('Y-m-d') : 'N/A'),
       'lastBirthdayNotified' => (null !== $employee->getLastBirthdayNotified() ? $employee->getLastBirthdayNotified()->format('Y-m-d') : 'N/A')
      ];
+     
+     $sent += $this->comm->sendEmail($recipient, 'BIRTHDAY_MAIL.html', 'Happy Birthday '.$employee->getName().' '.$employee->getLastName());
     }
    }
-   
-   
-   
   }
+  return $sent;
  }
 }

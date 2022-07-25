@@ -2,7 +2,7 @@
 /* Add this on all pages on top. */
 set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.PATH_SEPARATOR.$_SERVER['DOCUMENT_ROOT'].'/library/classes/');
 
-require_once 'Client.php';
+require_once 'ApiClient.php';
 
 /**
  * Call client requests easily
@@ -10,7 +10,7 @@ require_once 'Client.php';
  * @author    Mzimhle Mosiwe
  *
  */
-class Call extends Client
+class Call extends ApiClient
 {
  /**
    * Initialize the calls

@@ -2,7 +2,7 @@
 /* Add this on all pages on top. */
 set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.PATH_SEPARATOR.$_SERVER['DOCUMENT_ROOT'].'/library/classes/');
 
-require_once 'Response.php';
+require_once 'ApiResponse.php';
 
 /**
  * Quickly and easily access any REST or REST-like API.
@@ -16,7 +16,7 @@ require_once 'Response.php';
  * @method Response delete($body = null, $query = null, $headers = null)
  *
  */
-class Client
+class ApiClient
 {
     /** @var string */
     protected $host;
@@ -138,9 +138,9 @@ class Client
       * @param array  $headers      any additional request headers
       * @param bool   $retryOnLimit should retry if rate limit is reach?
       *
-      * @return Response object
+      * @return ApiResponse object
       */
-    public function request($method, $url, $body = null, $headers = null, $retryOnLimit = false): Response
+    public function request($method, $url, $body = null, $headers = null, $retryOnLimit = false): ApiResponse
     {
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -166,7 +166,7 @@ class Client
 
         curl_close($curl);
 
-        $response = new Response($statusCode, $responseBody, $responseHeaders);
+        $response = new ApiResponse($statusCode, $responseBody, $responseHeaders);
 
         if ($statusCode === 429 && $retryOnLimit) {
             $headers = $response->headers(true);

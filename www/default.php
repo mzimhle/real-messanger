@@ -13,7 +13,7 @@ $filters = array(
 
 $employeeData = $employeeObject->getData($filters);
 
-$employeeObject->sendEmail($employeeData, 'BIRTHDAY_MAIL.html', 'Happy Birthday!!');
+$sent = $employeeObject->sendBirthdayEmail($employeeData, 'BIRTHDAY_MAIL.html', 'Happy Birthday!!');
 
 ?>
 <!DOCTYPE html>
@@ -37,7 +37,7 @@ $employeeObject->sendEmail($employeeData, 'BIRTHDAY_MAIL.html', 'Happy Birthday!
    </div><!-- slim-pageheader -->
    <div class="section-wrapper">
     <label class="section-title">Birthday List</label>
-    <p class="mg-b-20 mg-sm-b-20">Below is a list of employees having birthdays today</p>
+    <p class="mg-b-20 mg-sm-b-20">Below is a list of employees having birthdays today. We have sent <?php echo $sent; ?> birthday emails</p>
     <div class="row">
      <div class="col-md-12">
        <table id="employee_data" class="table table-striped table-bordered">  

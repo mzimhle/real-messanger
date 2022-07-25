@@ -6,7 +6,7 @@
  * @author    Mzimhle Mosiwe
  *
  */ 
-class Response
+class ApiResponse
 {
     /** @var int */
     protected $statusCode;
