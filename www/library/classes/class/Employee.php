@@ -4,6 +4,8 @@ set_include_path($_SERVER['DOCUMENT_ROOT'].'/'.PATH_SEPARATOR.$_SERVER['DOCUMENT
 
 require_once 'Abstract/AbstractEmployee.php';
 require_once 'api/Call.php';
+require_once 'class/Comm.php';
+
 /**
  *
  * Employee data class to save its objects
@@ -15,6 +17,9 @@ class Employee extends AbstractEmployee {
 
  /** @var Call */
  public $call;
+ /** @var Comm */
+ public $comm;
+ /** @var host */
  private $host = 'https://interview-assessment-1.realmdigital.co.za/employees';
  
  /*
@@ -23,6 +28,7 @@ class Employee extends AbstractEmployee {
  public function __construct()
  {
   $this->call = new Call($this->host);
+  $this->comm = new Comm();  
   parent::__construct();
  }
  
@@ -74,5 +80,34 @@ class Employee extends AbstractEmployee {
    return $this;
  }
  
- 
+/**
+  *
+  * Load data into instance of this class
+  *  
+  * @return this
+  */
+ public function sendEmail(array $employeeData)
+ {
+  // Send message
+  if(count($employeeData)) {
+   foreach($employeeData as $employee) {
+    if(null !== $employee->getLastBirthdayNotified() && $employee->getLastBirthdayNotified()->format('Y-m-d') != date("Y-m-d")) {
+     $recipient = [
+      'recipient_from_name' => 'mzimhle.mosiwe@gmail.com',
+      'recipient_from_email' => 'Mzimhle Mosiwe',
+      'recipient_name' => $employee->getName().' '.$employee->getLastName(),
+      'recipient_email' => 'mzimhle.mosiwe@gmail.com',
+      'dateOfBirth' => $employee->getDateOfBirth()->format('Y-m-d'),   
+      'employmentEndDate' => (null !== $employee->getEmploymentEndDate() ? $employee->getEmploymentEndDate()->format('Y-m-d') : 'N/A'),
+      'employmentStartDate' => (null !== $employee->getEmploymentStartDate() ? $employee->getEmploymentStartDate()->format('Y-m-d') : 'N/A'),
+      'lastNotification' => (null !== $employee->getLastNotification() ? $employee->getLastNotification()->format('Y-m-d') : 'N/A'),
+      'lastBirthdayNotified' => (null !== $employee->getLastBirthdayNotified() ? $employee->getLastBirthdayNotified()->format('Y-m-d') : 'N/A')
+     ];
+    }
+   }
+   
+   
+   
+  }
+ }
 }

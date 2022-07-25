@@ -13,19 +13,7 @@ $filters = array(
 
 $employeeData = $employeeObject->getData($filters);
 
-// Send message
-if(count($employeeData)) {
- foreach($employeeData as $employee) {
-  if(null !== $employee->getLastBirthdayNotified() && $employee->getLastBirthdayNotified()->format('Y-m-d') != date("Y-m-d")) {
-   $recipient = [
-    'recipient_from_name' => 'mzimhle.mosiwe@gmail.com',
-    'recipient_from_email' => 'Mzimhle Mosiwe',
-    'recipient_name' => 'Mzimhle Mosiwe',
-    'recipient_email' => 'mzimhle.mosiwe@gmail.com'
-   ];
-  }
- }
-}
+$employeeObject->sendEmail($employeeData, 'BIRTHDAY_MAIL.html', 'Happy Birthday!!');
 
 ?>
 <!DOCTYPE html>
