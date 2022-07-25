@@ -39,7 +39,6 @@ class Comm
 		/* Send email. */
 		$response = $email_sendgrid->client->mail()->send()->post($mail);
 		/* Send the email. */
-  echo $response->statusCode(); exit;
 		if((int)$response->statusCode() >= 200 && (int)$response->statusCode() <= 299) {
 			return 1;
 		} else {

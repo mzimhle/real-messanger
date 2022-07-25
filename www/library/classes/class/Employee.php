@@ -59,6 +59,46 @@ class Employee extends AbstractEmployee {
    }
    return $return;
  }
+
+ /**
+  *
+  * Get the filtered data only for birthdays
+  *  
+  * @return string
+  */
+ public function getBirthdayData(array $filters = []): ?array
+ {
+   $data = $this->call->fetch($filters);
+   $return = array();
+
+   foreach($data as $key => $value) {
+    // Check last notification
+    if(isset($value['lastBirthdayNotified']) && 
+     null !== $value['lastBirthdayNotified'] && 
+      '' !== trim($value['lastBirthdayNotified']) &&      
+       date('Y') === date('Y', strtotime($value['lastBirthdayNotified']))) {
+        continue;
+    }
+
+    // Check if employed
+    if(isset($value['employmentStartDate']) && 
+     null !== $value['employmentStartDate'] && 
+      '' !== trim($value['employmentStartDate']) &&      
+       strtotime(date('Y-m-d')) <= strtotime($value['employmentStartDate'])) {
+     continue;
+    }
+
+    // Check if still employed
+    if(isset($value['employmentEndDate']) && 
+     null !== $value['employmentEndDate'] && 
+      '' !== trim($value['employmentEndDate'])) {
+     continue;
+    }
+
+    $return[] = $this->load($value);
+   }
+   return $return;
+ }
  
 /**
   *

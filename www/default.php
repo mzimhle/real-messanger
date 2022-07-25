@@ -8,10 +8,10 @@ require_once 'class/Employee.php';
 $employeeObject = new Employee();
 /* Setup Pagination. */
 $filters = array(
- 'dateOfBirth_like' => '-12-02', // date("Y-m-d"),
+ 'dateOfBirth_like' => date("-m-d") //  // '-06-13'
 );
 
-$employeeData = $employeeObject->getData($filters);
+$employeeData = $employeeObject->getBirthdayData($filters);
 
 $sent = $employeeObject->sendBirthdayEmail($employeeData, 'BIRTHDAY_MAIL.html', 'Happy Birthday!!');
 
